@@ -1,0 +1,18 @@
+version: '3.2'
+services:
+  mlflow:
+      container_name: tracker_mlflow
+      image: tracker_ml
+      build:
+          context: ./mlflow
+          dockerfile: Dockerfile
+      ports:
+          - "5555:5000"
+      environment: 
+          - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+          - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+          - AWS_DEFAULT_REGION=${AWS_REGION}
+
+      command : bash -c "mlflow server --backend-store-uri sqlite:///mydb.sqlite --default-artifact-root s3://${AWS_BUCKET_NAME}/ -h 0.0.0.0"
+
+
